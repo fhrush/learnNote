@@ -1,0 +1,115 @@
+学会输入输出  
+学习javaScript 高级程序设计第四版
+1、什么是javaScript 
+最早由网景公司为了一个小型项目，其实当时浏览器交互为了验证表单是否填写了，最后随着网页之间交互数据量访问越来越大了，所以慢慢受到广大程序员的追捧 
+javaScript 包括三个  DOM模型  BOM模型  ECMAScript 
+ECMAScript 其实是指定javaScript 标准的  不仅仅是javaScript 标准  语法
+DOM模型 文档对象模型（Document Object MOdel） 将整个页面抽象成一组分层节点 
+BOM模型 浏览器窗口模型  包括不仅仅包括  浏览器的信息、浏览器的放大缩小、浏览器的请求信息 
+小结：
+	JavaScript 是一门用来与网页交互的脚本语言，包括以下三个组成部分
+	ECMAScript:有ECMA-262定义并提供核心功能
+	文档对象模型（DOM) 提供与网页内容的交互接口
+	浏览器对象模型（BOM）提供与浏览器交互的方法和接口
+2、HTML 中的JavaScript 
+	使用特定的 <script> 其中不能在双引号中使用</script> 因为浏览器会识别出来然后直接结束报错
+	<script> 有一些特定的属性 好多都已经被弃用了浏览器不支持了，但还是有以下部分是支持的例如说是type <script type="text/javascript"></script>、src <script src=""> 可以引入相对路径下的文件不一定是js文件因为不对其文件类型进行检查，也可以写网址直接引入网址中的js，如果使用script 引入文件，若是引入文件会对页面下载文件然后读取网速中存在一定问题，以前<script src=""> 会写在html 中的<head></head> 标签中 会导致如果引入的东西多了网页给人的感觉会很卡，目前有两种解决方法 （1）将<script src="">放在<body></body> 整个页面的最后面先加载页面然后在加载引入js 因为html文件是从上往下读取的（2） 延迟加载 添加属性（defer） 这个对浏览器版本要求比较高，例子：<script defer src="example1.js"></script> 这个是让浏览器立即下载但是延时执行，由于对浏览器要求比较高所以还是第一种比较好。
+	小结：
+	2.1 JavaScript 是通过<script>元素插入到HTML页面中的。这个元素可用于把JavaScript 代码嵌入到HTMl 页面中，跟其他标记混合在一起，也可用于引入保存在外部文件中JavaScript。
+	（1）要包含外部JavaScript文件，必须将src属性设置为包含文件的URL。文件可以跟网页在一台服务器上、也可以位于完全不同的域。
+	（2）所有<script> 元素会依照他们在网页中出现的次序被解释，在不使用defer 和 async 属性的情况下，包含在<script>元素中的代码必须严格按照次序解释。
+	（3）对不推迟执行的脚本，浏览器必须解释完位于<script> 元素中的代码，然后才能继续渲染页面的剩余部分。为此，通常应该把<script> 元素放在页面末尾，介于主内容之后及</body>标签之前
+	（4）可以使用defer 属性把脚本推迟到文档渲染完毕之后在执行。推迟的脚本原则上按照他们被列出来的次序执行。
+	（5）可以使用async 属性表示脚本不需要等待其他脚本，同时也不阻挡文档渲染，即异步加载。异步脚本不能保证按照他们在页面中出现的次序执行
+	（6）通过使用<noscript>元素，可以指定在浏览器不支持脚本时显示的内容。如果浏览器支持并启用脚本，则<noscript>元素中的任何内容都不会被渲染。
+3、语言基础
+	标识符:第一个字符必须是字母、下划线（_）或者美元符号（$）
+		   第二个字符可以是字母、下划线（_）或者美元符号（$）或者数字
+	注释：支持 // 单行注释   /** 多行注释 **/
+	严格模式 会将不规范的写法报错 "use strict"; 写在脚本的文本头就会开始严格模式
+	语句：与Java差不多 （）{}
+	关键字保留字
+		关键字：break if of typeof else var let conset case try catch class debugger delete default continue do export extends finally for function import in instanceof new return super switch this throw void while with yield 
+		保留字：enum 
+		严格模式下的保留字：implements interface let package protected private public static 
+		模块代码保留：await
+	变量 定义变量 var let const
+		var 存在变量提升 let const不存在变量提升 印象较深的例子
+			在使用 var 的时候，最常见的问题就是对迭代变量的奇特声明和修改：
+			for (var i = 0; i < 5; ++i) {
+			setTimeout(() => console.log(i), 0)
+			}
+			// 你可能以为会输出 0、 1、 2、 3、 4
+			// 实际上会输出 5、 5、 5、 5、 5
+			之所以会这样，是因为在退出循环时，迭代变量保存的是导致循环退出的值： 5。在之后执行超时
+			逻辑时，所有的 i 都是同一个变量，因而输出的都是同一个最终值。
+			而在使用 let 声明迭代变量时， JavaScript 引擎在后台会为每个迭代循环声明一个新的迭代变量。
+			每个 setTimeout 引用的都是不同的变量实例，所以 console.log 输出的是我们期望的值，也就是循
+			环执行过程中每个迭代变量的值。
+			for (let i = 0; i < 5; ++i) {
+			setTimeout(() => console.log(i), 0)
+			}
+			// 会输出 0、 1、 2、 3、 4
+			这种每次迭代声明一个独立变量实例的行为适用于所有风格的 for 循环，包括 for-in 和 for-of
+			循环。
+			let 作用域为当前代码块不能重复进行定义
+		const定义变量必须赋值 而且不能进行更改等于说类似于常量，但是若是const定义的是对象，对象的属性可变化
+			例：const age=32；     const person={name:'zhangsan'} person.name="lisi"
+		es6 推荐好的编程习惯 1、不适用var 2、const 优先 let次之
+	数据类型
+		原始数据类型 Undefined、Null、String、Number、Boolean、Symbol（符号） 复杂数据类型 Object
+			 typeof 操作符 对一个值使用typeof操作符会返回下列字符串之一
+			 "undefined" 表示值未定义
+			 "boolean" 表示值是个布尔值
+			 "string" 表示值是个字符串
+			 "number" 表示值是个数字
+			 "symbol" 表示值是个符号
+			 "function" 表示值是个函数
+			 "object" 表示只是个对象
+		Undefined类型 
+			Undefined 类型就一个值就是特殊值 undefined 当使用var let声明变量但是没有初始化值都会初始化一个undefined值
+		Null类型
+			Null类型就是一个值 null null对象表示的是一个空对象指针 
+		Boolean类型
+			Boolean类型有两个字面值为 true false 这两个值不等同于数值 因此 true不等于1 false不等于0
+			Boolean() 可以进行转换 
+			数据类型        转换为true的值            转换为false的值
+			Boolean         ture                      false
+			String          非空字符串			      ""(空字符串)
+			Number          非零数值（包括无穷值）    0、NaN
+			Object			任意对象				  null
+			Undefined 		N/A(不存在)               undefined
+				let message = "Hello world!";
+				if (message) {
+				console.log("Value is true");
+				}
+				// 控制台打印 Value is true
+		Number类型 
+			Number类型使用IEEE 754格式表示整数和浮点数 Number类型由于内存原因不能展示所有数值 
+			最大值 Number.MAX_VALUE (1.7976931348623157e+308) 最小值 Number.MIN_VALUE (5e-324) 超过的数值则会使用 Infinity（无穷值）
+			任何无法表示的负数以-Infinity （负无穷） 任何无法表示的正数 Infinity（正无穷）
+			NaN 不是数字  还有函数来检验  isNaN() 
+			console.log(isNaN(NaN)); // true
+			console.log(isNaN(10)); // false， 10 是数值
+			console.log(isNaN("10")); // false，可以转换为数值 10
+			console.log(isNaN("blue")); // true，不可以转换为数值
+			console.log(isNaN(true)); // false，可以转换为数值 1
+			类型转换方法  Number() parseInt() parseFloat()
+				Number()函数基于如下规则执行转换。
+			 布尔值， true 转换为 1， false 转换为 0。
+			 数值，直接返回。
+			 null，返回 0。
+			 undefined，返回 NaN。
+			 字符串，应用以下规则。
+			 如果字符串包含数值字符，包括数值字符前面带加、减号的情况，则转换为一个十进制数值。
+				因此， Number("1")返回 1， Number("123")返回 123， Number("011")返回 11（忽略前面
+				的零）。
+			 如果字符串包含有效的浮点值格式如"1.1"，则会转换为相应的浮点值（同样，忽略前面的零）。
+			 如果字符串包含有效的十六进制格式如"0xf"，则会转换为与该十六进制值对应的十进制整
+				数值。
+			 如果是空字符串（不包含字符），则返回 0。
+			 如果字符串包含除上述情况之外的其他字符，则返回 NaN。
+			 对象，调用 valueOf()方法，并按照上述规则转换返回的值。如果转换结果是 NaN，则调用
+				toString()方法，再按照转换字符串的规则转换
+		String类型
+			
